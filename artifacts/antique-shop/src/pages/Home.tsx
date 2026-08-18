@@ -222,6 +222,106 @@ export default function Home() {
         </div>
       </section>
 
+      {/* COMMISSION SALES */}
+      <section className="py-24 bg-secondary text-secondary-foreground">
+        <div className="container mx-auto px-4 md:px-8 max-w-6xl">
+
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+          >
+            <span className="text-accent uppercase tracking-[0.3em] text-sm font-semibold mb-4 block">A Service We Offer</span>
+            <h2 className="font-serif text-4xl md:text-5xl text-secondary-foreground mb-4">Commission Sales</h2>
+            <div className="h-1 w-24 bg-accent mx-auto mb-6"></div>
+            <p className="text-secondary-foreground/70 max-w-2xl mx-auto text-lg leading-relaxed">
+              Have an antique, vintage piece or collectable you'd like to sell? Let us do the work for you.
+              We'll value it, display it beautifully, and find it the right home — sharing the proceeds when it sells.
+            </p>
+          </motion.div>
+
+          {/* How It Works Steps */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            {[
+              {
+                step: '01',
+                title: 'Bring It In',
+                body: "Bring your item to the shop and we'll take a look together. No appointment needed — just pop in during opening hours.",
+                delay: 0.1,
+              },
+              {
+                step: '02',
+                title: 'Professional Valuation',
+                body: 'Our experienced eye will assess and price your piece fairly, based on current market knowledge and years of buying and selling.',
+                delay: 0.2,
+              },
+              {
+                step: '03',
+                title: 'We Sell, You Earn',
+                body: 'Your item goes on display in the shop. Once it sells, you receive your agreed share of the sale price — straightforward and transparent.',
+                delay: 0.3,
+              },
+            ].map(({ step, title, body, delay }) => (
+              <motion.div
+                key={step}
+                className="relative bg-card border border-border p-8 shadow-md group hover:border-accent transition-all duration-300"
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay }}
+                whileHover={{ y: -4 }}
+              >
+                <span className="font-serif text-6xl text-accent/20 group-hover:text-accent/40 transition-colors absolute top-6 right-8 leading-none select-none">
+                  {step}
+                </span>
+                <h3 className="font-serif text-2xl text-card-foreground mb-4 relative z-10">{title}</h3>
+                <p className="text-muted-foreground leading-relaxed relative z-10">{body}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Detail panel */}
+          <motion.div
+            className="bg-primary text-primary-foreground p-8 md:p-12 border-l-4 border-accent shadow-xl flex flex-col md:flex-row items-start md:items-center gap-8"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+          >
+            <div className="flex-1">
+              <h3 className="font-serif text-2xl text-accent mb-3">What We Accept</h3>
+              <p className="text-primary-foreground/80 leading-relaxed mb-4">
+                We welcome quality antiques, vintage items, jewellery, collectables, cameras, artwork, furniture and unusual curiosities.
+                Every item is considered on its individual merit — if you're unsure whether we'd take it, just ask. We don't bite.
+              </p>
+              <ul className="grid grid-cols-2 gap-x-8 gap-y-1 text-sm text-primary-foreground/70">
+                {['Antiques & Collectables','Vintage Jewellery','Cameras & Optics','Artwork & Prints','Furniture & Home','Unusual Curiosities'].map(item => (
+                  <li key={item} className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent inline-block shrink-0"></span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="shrink-0 text-center">
+              <p className="text-accent font-serif text-lg mb-2">Interested?</p>
+              <p className="text-primary-foreground/70 text-sm mb-6 max-w-[200px]">
+                Come in, give us a call, or drop us an email and we'll arrange everything.
+              </p>
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-2 bg-accent text-primary px-8 py-3 uppercase tracking-widest text-xs font-bold hover:bg-white transition-colors duration-300"
+              >
+                Get In Touch <ArrowRight size={14} />
+              </Link>
+            </div>
+          </motion.div>
+
+        </div>
+      </section>
+
       {/* QUICK VISIT INFO */}
       <section className="py-24 relative">
         <div className="container mx-auto px-4 md:px-8 max-w-5xl">
