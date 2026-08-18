@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Antique Shop Website"
+description = "A professional, visually impressive website for a small independent UK antique, vintage and second-hand shop. Frontend-only (no e-commerce). Features Home, What We Sell, About and Contact pages with atmospheric vintage styling."
+version = "1.0.0"
+id = "artifacts/antique-shop"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23277
+
+[services.development]
+run = "pnpm --filter @workspace/antique-shop run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/antique-shop", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/antique-shop/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23277"
+BASE_PATH = "/"
