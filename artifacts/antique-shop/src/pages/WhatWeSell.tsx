@@ -2,9 +2,12 @@ import { motion } from 'framer-motion';
 import ImageGallery, { GalleryImage } from '@/components/ui/ImageGallery';
 
 // Import all generated images from attached_assets
-import cam1 from '@assets/shop/camera-1.jpg';
-import cam2 from '@assets/shop/camera-2.jpg';
-import cam3 from '@assets/shop/camera-3.jpg';
+// To replace camera photos: swap the filenames below
+import cam1 from '@assets/20260818_170454_1787069114705.jpg';
+import cam2 from '@assets/20260818_170448_1787069121220.jpg';
+import cam3 from '@assets/20260818_170442_1787069129241.jpg';
+import cam4 from '@assets/20260818_170441_1787069137068.jpg';
+import cam5 from '@assets/20260818_170454_1787069143867.jpg';
 
 import cloth1 from '@assets/shop/clothing-1.jpg';
 import cloth2 from '@assets/shop/clothing-2.jpg';
@@ -34,11 +37,11 @@ const CATEGORIES = [
     title: "Cameras & Photography",
     description: "Analog beauty. We specialize in working condition 35mm and medium format cameras from the 1920s to the 1980s, alongside vintage lenses, brass darkroom equipment, and original sepia photography.",
     images: [
-      { src: cam1, alt: "1930s Leica Camera", caption: "Vintage 1930s Rangefinder" },
-      { src: cam2, alt: "Twin-lens reflex camera", caption: "Medium Format TLR" },
-      { src: cam3, alt: "Folding bellows camera", caption: "Early 20th Century Bellows Camera" },
-      { src: cam1, alt: "Detail shot", caption: "Brass Detailing" }, // using duplicates to pad to ~4-5 slots
-      { src: cam2, alt: "Lens detail", caption: "Vintage Optics" },
+      { src: cam1, alt: "Camera & photography item", caption: "From the Collection" },
+      { src: cam2, alt: "Camera & photography item", caption: "From the Collection" },
+      { src: cam3, alt: "Camera & photography item", caption: "From the Collection" },
+      { src: cam4, alt: "Camera & photography item", caption: "From the Collection" },
+      { src: cam5, alt: "Camera & photography item", caption: "From the Collection" },
     ] as GalleryImage[]
   },
   {
