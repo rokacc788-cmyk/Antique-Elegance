@@ -81,7 +81,7 @@ export default function Contact() {
                   </p>
                   <p className="flex items-center gap-3 text-card-foreground hover:text-accent transition-colors">
                     <Mail size={18} className="text-muted-foreground" />
-                    <a href="mailto:hello@curioandco.example.com">hello@curioandco.example.com</a>
+                    <a href="mailto:hello@charmingantiques.example.com">hello@charmingantiques.example.com</a>
                   </p>
                 </div>
               </div>

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'wouter';
-import { ArrowRight, Clock, MapPin, Quote } from 'lucide-react';
+import { ArrowRight, Clock, MapPin, Quote, Facebook, ShoppingBag } from 'lucide-react';
 
 // Hero background image
 import heroBg from '@assets/shop/hero.jpg';
@@ -152,6 +152,73 @@ export default function Home() {
               </Link>
             </motion.div>
           </div>
+        </div>
+      </section>
+
+      {/* FIND US ONLINE */}
+      <section className="py-24 px-4 md:px-8 max-w-5xl mx-auto">
+        <motion.div
+          className="text-center mb-14"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+        >
+          <h2 className="font-serif text-4xl md:text-5xl text-primary mb-4">Find Us Online</h2>
+          <div className="h-1 w-24 bg-accent mx-auto mb-6"></div>
+          <p className="text-muted-foreground max-w-xl mx-auto text-lg">
+            Can't make it to the shop? Browse and buy selected items through our online stores — updated regularly with new arrivals.
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Facebook */}
+          <motion.a
+            href="https://facebook.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex flex-col items-center text-center bg-card border border-border p-10 shadow-md hover:shadow-xl hover:border-accent transition-all duration-300"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            whileHover={{ y: -4 }}
+          >
+            <div className="w-16 h-16 rounded-full bg-accent/10 border border-accent/30 flex items-center justify-center mb-6 group-hover:bg-accent group-hover:text-primary transition-colors duration-300">
+              <Facebook size={30} className="text-accent group-hover:text-primary transition-colors duration-300" />
+            </div>
+            <h3 className="font-serif text-2xl text-primary mb-3 group-hover:text-accent transition-colors">Facebook Marketplace</h3>
+            <p className="text-muted-foreground mb-6 leading-relaxed">
+              Follow our Facebook page for new arrivals, shop news, and items listed for local collection or postage on Marketplace.
+            </p>
+            <span className="inline-flex items-center gap-2 text-accent uppercase tracking-widest text-xs font-semibold border-b border-accent pb-1 group-hover:gap-3 transition-all">
+              Visit Our Facebook <ArrowRight size={13} />
+            </span>
+          </motion.a>
+
+          {/* eBay */}
+          <motion.a
+            href="https://ebay.co.uk"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex flex-col items-center text-center bg-card border border-border p-10 shadow-md hover:shadow-xl hover:border-accent transition-all duration-300"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            whileHover={{ y: -4 }}
+          >
+            <div className="w-16 h-16 rounded-full bg-accent/10 border border-accent/30 flex items-center justify-center mb-6 group-hover:bg-accent group-hover:text-primary transition-colors duration-300">
+              <ShoppingBag size={30} className="text-accent group-hover:text-primary transition-colors duration-300" />
+            </div>
+            <h3 className="font-serif text-2xl text-primary mb-3 group-hover:text-accent transition-colors">eBay Shop</h3>
+            <p className="text-muted-foreground mb-6 leading-relaxed">
+              Our eBay store carries a curated selection of smaller pieces that ship nationwide — cameras, collectibles, vintage accessories and more.
+            </p>
+            <span className="inline-flex items-center gap-2 text-accent uppercase tracking-widest text-xs font-semibold border-b border-accent pb-1 group-hover:gap-3 transition-all">
+              Browse Our eBay Store <ArrowRight size={13} />
+            </span>
+          </motion.a>
         </div>
       </section>
 

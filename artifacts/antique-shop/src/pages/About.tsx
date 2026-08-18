@@ -14,7 +14,7 @@ export default function About() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h1 className="font-serif text-5xl md:text-6xl text-primary mb-6">The Story of Curio & Co.</h1>
+          <h1 className="font-serif text-5xl md:text-6xl text-primary mb-6">The Story of Charming Antiques</h1>
           <div className="h-1 w-24 bg-accent mx-auto"></div>
         </motion.div>
 
@@ -29,7 +29,7 @@ export default function About() {
           <div className="prose prose-lg prose-p:text-muted-foreground prose-headings:font-serif prose-headings:text-primary">
             <h3>How It Started</h3>
             <p>
-              Curio & Co. wasn't born out of a grand business plan. It began in 1998, quite by accident, in a damp garage filled to the brim with things I simply couldn't bear to leave behind at estate sales and auctions.
+              Charming Antiques wasn't born out of a grand business plan. It began in 1998, quite by accident, in a damp garage filled to the brim with things I simply couldn't bear to leave behind at estate sales and auctions.
             </p>
             <p>
               I've always been afflicted with a romantic attachment to the discarded. When I see a worn leather armchair or a brass telescope tarnished by time, I don't see junk. I see the hands that built it, the people who used it, and the history it witnessed. 
