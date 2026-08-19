@@ -1,5 +1,9 @@
 import { motion } from 'framer-motion';
-import { MapPin, Phone, Mail, Clock, Facebook, ShoppingBag } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Facebook, ShoppingBag, ExternalLink } from 'lucide-react';
+
+const MAP_QUERY = encodeURIComponent('34 Boothferry Rd, Goole DN14 5DA');
+const MAP_EMBED_URL = `https://www.google.com/maps?q=${MAP_QUERY}&output=embed`;
+const DIRECTIONS_URL = `https://www.google.com/maps/dir/?api=1&destination=${MAP_QUERY}`;
 
 export default function Contact() {
   return (
@@ -81,7 +85,7 @@ export default function Contact() {
                   </p>
                   <p className="flex items-center gap-3 text-card-foreground hover:text-accent transition-colors">
                     <Mail size={18} className="text-muted-foreground" />
-                    <a href="mailto:hello@charmingantiques.example.com">hello@charmingantiques.example.com</a>
+                    <a href="mailto:hello@charmantique.example.com">hello@charmantique.example.com</a>
                   </p>
                 </div>
               </div>
@@ -89,25 +93,31 @@ export default function Contact() {
             </div>
           </motion.div>
 
-          {/* Online Buying & Map Placeholder */}
+          {/* Online Buying & Interactive Map */}
           <motion.div 
             className="flex flex-col gap-8"
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            {/* Map Placeholder */}
-            <div className="bg-secondary relative aspect-square md:aspect-video lg:aspect-square flex flex-col items-center justify-center p-8 text-center rounded-sm overflow-hidden border border-border shadow-md group">
-              <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              <MapPin size={48} className="text-accent mb-4" />
-               <h3 className="font-serif text-2xl text-primary mb-2">Find Us in Goole</h3>
-              <p className="text-muted-foreground text-sm max-w-[250px]">
-                 Interactive map would load here. <br/>
-                 34 Boothferry Rd, Goole
-              </p>
-              
-              {/* Decorative grid to look like a map placeholder */}
-              <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.05)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none z-0"></div>
+            {/* Interactive Map */}
+            <div className="relative aspect-square md:aspect-video lg:aspect-square overflow-hidden rounded-sm border border-border bg-secondary shadow-md">
+              <iframe
+                src={MAP_EMBED_URL}
+                title="Interactive map showing Charm Antique on Boothferry Road in Goole"
+                className="absolute inset-0 h-full w-full border-0"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+              />
+              <a
+                href={DIRECTIONS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute bottom-4 right-4 z-10 inline-flex items-center gap-2 bg-primary px-5 py-3 text-xs font-bold uppercase tracking-widest text-primary-foreground shadow-lg transition-colors hover:bg-accent hover:text-primary"
+              >
+                Get Directions <ExternalLink size={14} />
+              </a>
             </div>
 
             {/* Online Sales Banner */}

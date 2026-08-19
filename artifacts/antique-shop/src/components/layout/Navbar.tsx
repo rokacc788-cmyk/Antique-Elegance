@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
 import { Menu, X, Facebook, ShoppingBag } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import TreeOfLifeLogo from '@/components/ui/TreeOfLifeLogo';
+import BrandLogo from '@/components/ui/BrandLogo';
 
 const NAV_LINKS = [
   { label: 'Home', href: '/' },
@@ -41,10 +41,10 @@ export default function Navbar() {
         {/* Logo + Name */}
         <Link href="/" className="group flex items-center gap-3">
           <span className="text-accent transition-transform duration-300 group-hover:scale-110">
-            <TreeOfLifeLogo size={38} />
+            <BrandLogo height={34} />
           </span>
           <span className="font-serif text-2xl font-bold tracking-tight text-foreground transition-colors group-hover:text-accent leading-none">
-            Charming Antiques
+            Charm Antique
           </span>
         </Link>
 
@@ -107,8 +107,8 @@ export default function Navbar() {
           >
             <div className="p-4 flex justify-between items-center border-b border-border">
               <span className="flex items-center gap-2 text-accent">
-                <TreeOfLifeLogo size={30} />
-                <span className="font-serif text-xl font-bold text-foreground">Charming Antiques</span>
+                <BrandLogo height={26} />
+                <span className="font-serif text-xl font-bold text-foreground">Charm Antique</span>
               </span>
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
