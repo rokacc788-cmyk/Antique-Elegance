@@ -35,12 +35,12 @@ export default function Contact() {
                   <MapPin className="text-accent" /> Location & Directions
                 </h2>
                 <p className="text-card-foreground text-lg mb-4">
-                  14 Cobblestone Lane<br />
-                  Historic Quarter<br />
-                  York, YO1 7XX
+                  34 Boothferry Rd<br />
+                  Goole<br />
+                  DN14 5DA
                 </p>
                 <p className="text-muted-foreground text-sm leading-relaxed border-l-2 border-accent pl-4">
-                  We are located just off the Shambles. Look for the dark green painted frontage and the brass telescope in the window. The nearest parking is the Q-Park Shambles (3 mins walk).
+                  We are located on Boothferry Road in Goole. Please contact us if you need directions or local parking information.
                 </p>
               </div>
 
@@ -100,10 +100,10 @@ export default function Contact() {
             <div className="bg-secondary relative aspect-square md:aspect-video lg:aspect-square flex flex-col items-center justify-center p-8 text-center rounded-sm overflow-hidden border border-border shadow-md group">
               <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
               <MapPin size={48} className="text-accent mb-4" />
-              <h3 className="font-serif text-2xl text-primary mb-2">Find Us in York</h3>
+               <h3 className="font-serif text-2xl text-primary mb-2">Find Us in Goole</h3>
               <p className="text-muted-foreground text-sm max-w-[250px]">
-                Interactive map would load here. <br/>
-                Coordinates: 53.9583° N, 1.0803° W
+                 Interactive map would load here. <br/>
+                 34 Boothferry Rd, Goole
               </p>
               
               {/* Decorative grid to look like a map placeholder */}
@@ -112,7 +112,7 @@ export default function Contact() {
 
             {/* Online Sales Banner */}
             <div className="bg-primary text-primary-foreground p-8 rounded-sm shadow-xl border-b-4 border-accent">
-              <h3 className="font-serif text-2xl mb-4 text-accent">Can't make it to York?</h3>
+               <h3 className="font-serif text-2xl mb-4 text-accent">Can't make it to Goole?</h3>
               <p className="text-primary-foreground/80 mb-6 leading-relaxed">
                 While we believe antiques are best appreciated in person, we regularly ship small items and selected pieces nationwide. Check our online listings for our current shippable inventory.
               </p>

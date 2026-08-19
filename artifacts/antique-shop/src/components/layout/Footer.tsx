@@ -63,7 +63,7 @@ export default function Footer() {
             <ul className="space-y-4 text-primary-foreground/80">
               <li className="flex items-start gap-3">
                 <MapPin className="shrink-0 mt-1 text-accent" size={18} />
-                <span>14 Cobblestone Lane,<br/>Historic Quarter,<br/>York, YO1 7XX</span>
+                 <span>34 Boothferry Rd,<br/>Goole,<br/>DN14 5DA</span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="shrink-0 text-accent" size={18} />

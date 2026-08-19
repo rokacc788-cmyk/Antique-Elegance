@@ -82,7 +82,7 @@ export default function About() {
           <div className="order-1 md:order-2 prose prose-lg prose-p:text-muted-foreground prose-headings:font-serif prose-headings:text-primary">
             <h3>The Shop Today</h3>
             <p>
-              Located on historic Cobblestone Lane in York, the shop is exactly what an antique store should be: slightly cramped, smelling faintly of beeswax polish and old paper, and filled from floor to ceiling with the unusual.
+              Located on Boothferry Road in Goole, the shop is exactly what an antique store should be: slightly cramped, smelling faintly of beeswax polish and old paper, and filled from floor to ceiling with the unusual.
             </p>
             <p>
               We are not a sterile gallery. You are encouraged to touch the items, test the winding mechanism on the pocket watches, and try out the typewriters. 

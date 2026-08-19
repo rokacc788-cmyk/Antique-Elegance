@@ -344,9 +344,9 @@ export default function Home() {
                 <MapPin className="text-accent mb-4" size={32} />
                 <h3 className="font-serif text-2xl text-primary mb-4">Location</h3>
                 <p className="text-muted-foreground max-w-[200px] mb-6">
-                  14 Cobblestone Lane,<br />
-                  Historic Quarter,<br />
-                  York, YO1 7XX
+                   34 Boothferry Rd,<br />
+                   Goole,<br />
+                   DN14 5DA
                 </p>
                 <Link 
                   href="/contact" 
