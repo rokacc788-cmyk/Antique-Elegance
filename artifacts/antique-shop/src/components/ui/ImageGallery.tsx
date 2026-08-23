@@ -120,6 +120,8 @@ export default function ImageGallery({ images }: ImageGalleryProps) {
             style={{
               left: getSlidePosition(relativePosition),
               zIndex: images.length - distance,
+              transition: 'left 650ms cubic-bezier(0.22, 1, 0.36, 1)',
+              willChange: 'left',
             }}
           >
             <motion.button
@@ -130,10 +132,10 @@ export default function ImageGallery({ images }: ImageGalleryProps) {
                   : 'cursor-pointer border-border/70 hover:border-accent'
               }`}
               animate={{
-                scale: isActive ? 1 : distance === 1 ? 0.72 : 0.5,
+                scale: isActive ? 1.08 : distance === 1 ? 0.68 : 0.46,
                 opacity: isActive ? 1 : distance === 1 ? 0.7 : 0.35,
               }}
-              transition={{ type: 'spring', stiffness: 240, damping: 24 }}
+              transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
               onClick={() => {
                 if (suppressClick.current) return;
 
