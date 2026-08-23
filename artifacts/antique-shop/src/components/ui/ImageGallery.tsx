@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, ChevronUp, ChevronDown, ZoomIn } from 'lucide-react';
 
 export interface GalleryImage {
   src: string;
@@ -14,6 +14,9 @@ interface ImageGalleryProps {
 
 export default function ImageGallery({ images }: ImageGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [activeIndex, setActiveIndex] = useState(Math.min(1, images.length - 1));
+  const sliderRef = useRef<HTMLDivElement>(null);
+  const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   // Keyboard navigation for lightbox
   useEffect(() => {
@@ -39,32 +42,140 @@ export default function ImageGallery({ images }: ImageGalleryProps) {
     return () => { document.body.style.overflow = ''; };
   }, [selectedIndex]);
 
-  if (!images || images.length === 0) return null;
+  const focusSlide = (index: number, behavior: ScrollBehavior = 'smooth') => {
+    const nextIndex = Math.max(0, Math.min(index, images.length - 1));
+    setActiveIndex(nextIndex);
+    slideRefs.current[nextIndex]?.scrollIntoView({ behavior, block: 'center' });
+  };
+
+  const updateActiveSlide = () => {
+    const slider = sliderRef.current;
+    if (!slider) return;
+
+    const sliderCenter = slider.scrollTop + slider.clientHeight / 2;
+    let closestIndex = activeIndex;
+    let closestDistance = Number.POSITIVE_INFINITY;
+
+    slideRefs.current.forEach((slide, index) => {
+      if (!slide) return;
+      const slideCenter = slide.offsetTop + slide.offsetHeight / 2;
+      const distance = Math.abs(sliderCenter - slideCenter);
+
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestIndex = index;
+      }
+    });
+
+    if (closestIndex !== activeIndex) {
+      setActiveIndex(closestIndex);
+    }
+  };
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => focusSlide(Math.min(1, images.length - 1), 'auto'));
+    return () => window.cancelAnimationFrame(frame);
+  }, [images.length]);
+
+  if (images.length === 0) return null;
 
   return (
     <>
-      {/* Thumbnail Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="relative">
+        <div className="mb-5 flex items-center justify-between gap-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent">
+            Scroll the collection
+          </p>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => focusSlide(activeIndex - 1)}
+              disabled={activeIndex === 0}
+              className="flex h-9 w-9 items-center justify-center border border-border text-primary transition-colors hover:border-accent hover:text-accent disabled:cursor-not-allowed disabled:opacity-35"
+              aria-label="Previous photo"
+            >
+              <ChevronUp size={18} />
+            </button>
+            <button
+              type="button"
+              onClick={() => focusSlide(activeIndex + 1)}
+              disabled={activeIndex === images.length - 1}
+              className="flex h-9 w-9 items-center justify-center border border-border text-primary transition-colors hover:border-accent hover:text-accent disabled:cursor-not-allowed disabled:opacity-35"
+              aria-label="Next photo"
+            >
+              <ChevronDown size={18} />
+            </button>
+          </div>
+        </div>
+
+        <div
+          ref={sliderRef}
+          onScroll={updateActiveSlide}
+          className="h-[520px] snap-y snap-mandatory overflow-y-auto overscroll-contain pr-3 [scrollbar-color:var(--accent)_transparent] [scrollbar-width:thin] md:h-[610px]"
+          aria-label="Vertical photo collection"
+        >
+          <div className="flex min-h-full flex-col justify-center gap-4 py-28">
         {images.map((img, idx) => (
           <motion.div
             key={idx}
-            className={`group relative overflow-hidden rounded-sm cursor-pointer border border-border/50 aspect-square ${
-              idx === 0 ? 'col-span-2 row-span-2 md:col-span-2 md:row-span-2' : ''
+            ref={(element) => {
+              slideRefs.current[idx] = element;
+            }}
+            layout
+            className={`group relative snap-center overflow-hidden rounded-sm border transition-colors duration-300 ${
+              idx === activeIndex
+                ? 'h-[290px] border-accent shadow-xl md:h-[340px]'
+                : 'h-[148px] cursor-pointer border-border/60 opacity-65 hover:border-accent/70 hover:opacity-90 md:h-[170px]'
             }`}
-            whileHover={{ scale: 0.98 }}
-            onClick={() => setSelectedIndex(idx)}
+            animate={{ scale: idx === activeIndex ? 1 : 0.94 }}
+            transition={{ type: 'spring', stiffness: 260, damping: 26 }}
+            onClick={() => {
+              if (idx === activeIndex) {
+                setSelectedIndex(idx);
+              } else {
+                focusSlide(idx);
+              }
+            }}
+            onMouseEnter={() => {
+              if (idx !== activeIndex) focusSlide(idx);
+            }}
           >
             <img 
               src={img.src} 
               alt={img.alt} 
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              className={`h-full w-full object-cover transition-transform duration-700 ${
+                idx === activeIndex ? 'scale-100 group-hover:scale-105' : 'scale-105'
+              }`}
               loading="lazy"
             />
-            <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/20 transition-colors duration-300 flex items-center justify-center">
-              <ZoomIn className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-md" size={32} />
+            <div className={`absolute inset-0 bg-gradient-to-t from-primary/85 via-primary/15 to-transparent transition-opacity duration-300 ${
+              idx === activeIndex ? 'opacity-100' : 'opacity-80'
+            }`}>
+              <div className="absolute inset-x-0 bottom-0 p-4 md:p-5">
+                <p className={`font-serif text-primary-foreground transition-all duration-300 ${
+                  idx === activeIndex ? 'text-xl md:text-2xl' : 'text-base'
+                }`}>
+                  {img.caption || img.alt}
+                </p>
+                {idx === activeIndex && (
+                  <p className="mt-1 text-sm leading-relaxed text-primary-foreground/75">
+                    {img.alt}
+                  </p>
+                )}
+              </div>
+            </div>
+            <div className={`absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-white/30 bg-primary/55 text-white transition-opacity ${
+              idx === activeIndex ? 'opacity-100' : 'opacity-0'
+            }`}>
+              <ZoomIn size={17} aria-hidden="true" />
             </div>
           </motion.div>
         ))}
+          </div>
+        </div>
+        <p className="mt-4 text-center text-sm text-muted-foreground">
+          The centre image is highlighted. Select it to view it in full.
+        </p>
       </div>
 
       {/* Lightbox Modal */}

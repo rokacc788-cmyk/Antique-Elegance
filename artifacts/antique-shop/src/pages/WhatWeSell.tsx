@@ -37,11 +37,11 @@ const CATEGORIES = [
     title: "Cameras & Photography",
     description: "Analog beauty. We specialize in working condition 35mm and medium format cameras from the 1920s to the 1980s, alongside vintage lenses, brass darkroom equipment, and original sepia photography.",
     images: [
-      { src: cam1, alt: "Camera & photography item", caption: "From the Collection" },
-      { src: cam2, alt: "Camera & photography item", caption: "From the Collection" },
-      { src: cam3, alt: "Camera & photography item", caption: "From the Collection" },
-      { src: cam4, alt: "Camera & photography item", caption: "From the Collection" },
-      { src: cam5, alt: "Camera & photography item", caption: "From the Collection" },
+      { src: cam1, alt: "Vintage camera from the collection", caption: "A classic camera with original controls and character." },
+      { src: cam2, alt: "Camera body and lens detail", caption: "A closer look at traditional lenses and precision engineering." },
+      { src: cam3, alt: "Vintage photography equipment", caption: "Period equipment preserved with its original patina." },
+      { src: cam4, alt: "Camera accessories from the collection", caption: "A well-loved piece with the details that tell its story." },
+      { src: cam5, alt: "Vintage camera ready for its next owner", caption: "A camera ready for its next chapter behind the lens." },
     ] as GalleryImage[]
   },
   {
@@ -169,7 +169,7 @@ export default function WhatWeSell() {
                 </p>
                 <div className="hidden lg:block">
                   <p className="text-sm text-accent uppercase tracking-widest font-semibold">
-                    Click images to enlarge
+                    Scroll through the collection to explore
                   </p>
                 </div>
               </div>
