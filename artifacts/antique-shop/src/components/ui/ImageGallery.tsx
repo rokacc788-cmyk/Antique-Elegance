@@ -62,8 +62,8 @@ export default function ImageGallery({ images }: ImageGalleryProps) {
     if (position === 0) return '50%';
 
     const offset = Math.abs(position) === 1
-      ? 'clamp(9.5rem, 23vw, 20rem)'
-      : 'clamp(19rem, 46vw, 40rem)';
+      ? 'clamp(11rem, 24vw, 22rem)'
+      : 'clamp(22rem, 48vw, 44rem)';
 
     return `calc(50% ${position > 0 ? '+' : '-'} ${offset})`;
   };
@@ -100,7 +100,7 @@ export default function ImageGallery({ images }: ImageGalleryProps) {
         </p>
 
         <div
-          className="relative h-[360px] touch-pan-y overflow-hidden md:h-[455px]"
+          className="relative h-[400px] touch-pan-y overflow-hidden md:h-[515px]"
           onPointerDown={handlePointerDown}
           onPointerUp={handlePointerUp}
           onPointerCancel={() => {
@@ -120,22 +120,29 @@ export default function ImageGallery({ images }: ImageGalleryProps) {
             style={{
               left: getSlidePosition(relativePosition),
               zIndex: images.length - distance,
-              transition: 'left 650ms cubic-bezier(0.22, 1, 0.36, 1)',
-              willChange: 'left',
+              transition: 'left 1050ms cubic-bezier(0.16, 1, 0.3, 1)',
+              willChange: 'left, transform',
             }}
           >
             <motion.button
               type="button"
-              className={`group relative block h-32 w-52 -translate-x-1/2 overflow-hidden rounded-sm border-2 bg-secondary shadow-lg transition-colors md:h-52 md:w-80 ${
+              className={`group relative block h-32 w-52 -translate-x-1/2 overflow-hidden rounded-sm transition-shadow md:h-52 md:w-80 ${
                 isActive
-                  ? 'cursor-zoom-in border-accent'
-                  : 'cursor-pointer border-border/70 hover:border-accent'
+                  ? 'cursor-zoom-in shadow-[0_24px_40px_rgba(54,35,20,0.32)]'
+                  : 'cursor-pointer hover:shadow-[0_12px_24px_rgba(54,35,20,0.18)]'
               }`}
               animate={{
-                scale: isActive ? 1.08 : distance === 1 ? 0.68 : 0.46,
+                scale: isActive ? 1.3 : distance === 1 ? 0.6 : 0.4,
                 opacity: isActive ? 1 : distance === 1 ? 0.7 : 0.35,
+                y: isActive ? [0, -10, 0] : 0,
               }}
-              transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+              transition={{
+                scale: { duration: 0.95, ease: [0.16, 1, 0.3, 1] },
+                opacity: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+                y: isActive
+                  ? { duration: 3.6, ease: 'easeInOut', repeat: Infinity, repeatType: 'mirror' }
+                  : { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+              }}
               onClick={() => {
                 if (suppressClick.current) return;
 
