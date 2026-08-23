@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, type PointerEvent as ReactPointerEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ChevronLeft, ChevronRight, ChevronUp, ChevronDown, ZoomIn } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
 
 export interface GalleryImage {
   src: string;
@@ -14,9 +14,9 @@ interface ImageGalleryProps {
 
 export default function ImageGallery({ images }: ImageGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const [activeIndex, setActiveIndex] = useState(Math.min(1, images.length - 1));
-  const sliderRef = useRef<HTMLDivElement>(null);
-  const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const pointerStartX = useRef<number | null>(null);
+  const suppressClick = useRef(false);
 
   // Keyboard navigation for lightbox
   useEffect(() => {
@@ -42,140 +42,163 @@ export default function ImageGallery({ images }: ImageGalleryProps) {
     return () => { document.body.style.overflow = ''; };
   }, [selectedIndex]);
 
-  const focusSlide = (index: number, behavior: ScrollBehavior = 'smooth') => {
-    const nextIndex = Math.max(0, Math.min(index, images.length - 1));
-    setActiveIndex(nextIndex);
-    slideRefs.current[nextIndex]?.scrollIntoView({ behavior, block: 'center' });
+  const moveSlide = (direction: number) => {
+    setActiveIndex((currentIndex) => (
+      (currentIndex + direction + images.length) % images.length
+    ));
   };
 
-  const updateActiveSlide = () => {
-    const slider = sliderRef.current;
-    if (!slider) return;
+  const getRelativePosition = (index: number) => {
+    let position = index - activeIndex;
+    const midpoint = Math.floor(images.length / 2);
 
-    const sliderCenter = slider.scrollTop + slider.clientHeight / 2;
-    let closestIndex = activeIndex;
-    let closestDistance = Number.POSITIVE_INFINITY;
+    if (position > midpoint) position -= images.length;
+    if (position < -midpoint) position += images.length;
 
-    slideRefs.current.forEach((slide, index) => {
-      if (!slide) return;
-      const slideCenter = slide.offsetTop + slide.offsetHeight / 2;
-      const distance = Math.abs(sliderCenter - slideCenter);
-
-      if (distance < closestDistance) {
-        closestDistance = distance;
-        closestIndex = index;
-      }
-    });
-
-    if (closestIndex !== activeIndex) {
-      setActiveIndex(closestIndex);
-    }
+    return position;
   };
 
-  useEffect(() => {
-    const frame = window.requestAnimationFrame(() => focusSlide(Math.min(1, images.length - 1), 'auto'));
-    return () => window.cancelAnimationFrame(frame);
-  }, [images.length]);
+  const getSlidePosition = (position: number) => {
+    if (position === 0) return '50%';
+
+    const offset = Math.abs(position) === 1
+      ? 'clamp(9.5rem, 23vw, 20rem)'
+      : 'clamp(19rem, 46vw, 40rem)';
+
+    return `calc(50% ${position > 0 ? '+' : '-'} ${offset})`;
+  };
+
+  const handlePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    pointerStartX.current = event.clientX;
+    suppressClick.current = false;
+  };
+
+  const handlePointerUp = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (pointerStartX.current === null) return;
+
+    const distance = event.clientX - pointerStartX.current;
+    pointerStartX.current = null;
+
+    if (Math.abs(distance) < 45) return;
+
+    suppressClick.current = true;
+    moveSlide(distance < 0 ? 1 : -1);
+    window.setTimeout(() => {
+      suppressClick.current = false;
+    }, 0);
+  };
 
   if (images.length === 0) return null;
+
+  const activeImage = images[activeIndex];
 
   return (
     <>
       <div className="relative">
-        <div className="mb-5 flex items-center justify-between gap-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent">
-            Scroll the collection
-          </p>
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => focusSlide(activeIndex - 1)}
-              disabled={activeIndex === 0}
-              className="flex h-9 w-9 items-center justify-center border border-border text-primary transition-colors hover:border-accent hover:text-accent disabled:cursor-not-allowed disabled:opacity-35"
-              aria-label="Previous photo"
-            >
-              <ChevronUp size={18} />
-            </button>
-            <button
-              type="button"
-              onClick={() => focusSlide(activeIndex + 1)}
-              disabled={activeIndex === images.length - 1}
-              className="flex h-9 w-9 items-center justify-center border border-border text-primary transition-colors hover:border-accent hover:text-accent disabled:cursor-not-allowed disabled:opacity-35"
-              aria-label="Next photo"
-            >
-              <ChevronDown size={18} />
-            </button>
-          </div>
-        </div>
+        <p className="mb-4 text-center text-xs font-semibold uppercase tracking-[0.18em] text-accent">
+          Swipe or use the arrows to explore
+        </p>
 
         <div
-          ref={sliderRef}
-          onScroll={updateActiveSlide}
-          className="h-[520px] snap-y snap-mandatory overflow-y-auto overscroll-contain pr-3 [scrollbar-color:var(--accent)_transparent] [scrollbar-width:thin] md:h-[610px]"
-          aria-label="Vertical photo collection"
+          className="relative h-[360px] touch-pan-y overflow-hidden md:h-[455px]"
+          onPointerDown={handlePointerDown}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={() => {
+            pointerStartX.current = null;
+          }}
+          aria-label="Horizontal photo carousel"
         >
-          <div className="flex min-h-full flex-col justify-center gap-4 py-28">
-        {images.map((img, idx) => (
-          <motion.div
+          {images.map((img, idx) => {
+            const relativePosition = getRelativePosition(idx);
+            const distance = Math.abs(relativePosition);
+            const isActive = idx === activeIndex;
+
+            return (
+          <div
             key={idx}
-            ref={(element) => {
-              slideRefs.current[idx] = element;
-            }}
-            layout
-            className={`group relative snap-center overflow-hidden rounded-sm border transition-colors duration-300 ${
-              idx === activeIndex
-                ? 'h-[290px] border-accent shadow-xl md:h-[340px]'
-                : 'h-[148px] cursor-pointer border-border/60 opacity-65 hover:border-accent/70 hover:opacity-90 md:h-[170px]'
-            }`}
-            animate={{ scale: idx === activeIndex ? 1 : 0.94 }}
-            transition={{ type: 'spring', stiffness: 260, damping: 26 }}
-            onClick={() => {
-              if (idx === activeIndex) {
-                setSelectedIndex(idx);
-              } else {
-                focusSlide(idx);
-              }
-            }}
-            onMouseEnter={() => {
-              if (idx !== activeIndex) focusSlide(idx);
+            className="absolute top-1/2 -translate-y-1/2"
+            style={{
+              left: getSlidePosition(relativePosition),
+              zIndex: images.length - distance,
             }}
           >
-            <img 
-              src={img.src} 
-              alt={img.alt} 
-              className={`h-full w-full object-cover transition-transform duration-700 ${
-                idx === activeIndex ? 'scale-100 group-hover:scale-105' : 'scale-105'
+            <motion.button
+              type="button"
+              className={`group relative block h-32 w-52 -translate-x-1/2 overflow-hidden rounded-sm border-2 bg-secondary shadow-lg transition-colors md:h-52 md:w-80 ${
+                isActive
+                  ? 'cursor-zoom-in border-accent'
+                  : 'cursor-pointer border-border/70 hover:border-accent'
               }`}
-              loading="lazy"
-            />
-            <div className={`absolute inset-0 bg-gradient-to-t from-primary/85 via-primary/15 to-transparent transition-opacity duration-300 ${
-              idx === activeIndex ? 'opacity-100' : 'opacity-80'
-            }`}>
-              <div className="absolute inset-x-0 bottom-0 p-4 md:p-5">
-                <p className={`font-serif text-primary-foreground transition-all duration-300 ${
-                  idx === activeIndex ? 'text-xl md:text-2xl' : 'text-base'
-                }`}>
-                  {img.caption || img.alt}
-                </p>
-                {idx === activeIndex && (
-                  <p className="mt-1 text-sm leading-relaxed text-primary-foreground/75">
-                    {img.alt}
-                  </p>
-                )}
-              </div>
-            </div>
-            <div className={`absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-white/30 bg-primary/55 text-white transition-opacity ${
-              idx === activeIndex ? 'opacity-100' : 'opacity-0'
-            }`}>
-              <ZoomIn size={17} aria-hidden="true" />
-            </div>
-          </motion.div>
-        ))}
+              animate={{
+                scale: isActive ? 1 : distance === 1 ? 0.72 : 0.5,
+                opacity: isActive ? 1 : distance === 1 ? 0.7 : 0.35,
+              }}
+              transition={{ type: 'spring', stiffness: 240, damping: 24 }}
+              onClick={() => {
+                if (suppressClick.current) return;
+
+                if (isActive) {
+                  setSelectedIndex(idx);
+                } else {
+                  setActiveIndex(idx);
+                }
+              }}
+              aria-label={isActive ? `Open ${img.caption || img.alt}` : `Focus ${img.caption || img.alt}`}
+              aria-current={isActive ? 'true' : undefined}
+            >
+              <img
+                src={img.src}
+                alt={img.alt}
+                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                loading="lazy"
+                draggable={false}
+              />
+              <div className={`pointer-events-none absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/5 to-transparent ${
+                isActive ? 'opacity-100' : 'opacity-75'
+              }`} />
+              {isActive && (
+                <>
+                  <div className="pointer-events-none absolute inset-x-3 bottom-5 text-center text-primary-foreground md:bottom-8">
+                    <p className="font-serif text-base leading-tight md:text-xl">{img.caption || img.alt}</p>
+                  </div>
+                  <span className="pointer-events-none absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full border border-white/30 bg-primary/55 text-white">
+                    <ZoomIn size={15} aria-hidden="true" />
+                  </span>
+                </>
+              )}
+            </motion.button>
           </div>
+            );
+          })}
         </div>
-        <p className="mt-4 text-center text-sm text-muted-foreground">
-          The centre image is highlighted. Select it to view it in full.
-        </p>
+
+        <div className="mx-auto -mt-6 max-w-md rounded-sm border border-border bg-card px-6 pb-5 pt-10 text-center shadow-md">
+          <p className="font-serif text-xl text-card-foreground">{activeImage.caption || activeImage.alt}</p>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{activeImage.alt}</p>
+          <p className="mt-3 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
+            {activeIndex + 1} of {images.length}
+          </p>
+        </div>
+
+        <div className="mt-5 flex items-center justify-center gap-4">
+          <button
+            type="button"
+            onClick={() => moveSlide(-1)}
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card text-primary transition-colors hover:border-accent hover:text-accent"
+            aria-label="Previous photo"
+          >
+            <ChevronLeft size={20} />
+          </button>
+          <span className="text-sm text-muted-foreground">The collection loops continuously</span>
+          <button
+            type="button"
+            onClick={() => moveSlide(1)}
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card text-primary transition-colors hover:border-accent hover:text-accent"
+            aria-label="Next photo"
+          >
+            <ChevronRight size={20} />
+          </button>
+        </div>
       </div>
 
       {/* Lightbox Modal */}

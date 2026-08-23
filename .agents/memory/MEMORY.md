@@ -1,0 +1,1 @@
+- [Carousel browser testing](carousel-browser-testing.md) — center carousel stages below the sticky header before pointer tests to avoid false failures from offscreen hit targets.

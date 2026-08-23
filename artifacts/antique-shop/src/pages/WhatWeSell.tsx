@@ -169,7 +169,7 @@ export default function WhatWeSell() {
                 </p>
                 <div className="hidden lg:block">
                   <p className="text-sm text-accent uppercase tracking-widest font-semibold">
-                    Scroll through the collection to explore
+                    Swipe through the collection to explore
                   </p>
                 </div>
               </div>
